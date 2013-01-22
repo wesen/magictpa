@@ -17,8 +17,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import gdb
-import magictpa.armv7m
-import magictpa.tpacapture
+import armv7m
+import tpacapture
 
 print "Black Magic Trace Extention for GDB (MagicTPA) - 0.1"
 print "Copyright (C) 2012  Black Sphere Technologies Ltd."
@@ -36,7 +36,7 @@ if not gdb.parameter("target-async"):
 # Enable SWO capture and start capture/decoder thread
 #try:
 serial, ifno, epno = gdb.execute("monitor traceswo", False, True).split(':')
-capture = magictpa.tpacapture.TPACapture(serial, int(ifno, 16), int(epno, 16))
+capture = tpacapture.TPACapture(serial, int(ifno, 16), int(epno, 16))
 capture.start()
 #except:
 #	raise gdb.GdbError("Failed to initialise SWO capture.  Is it supported by the target?")
@@ -44,7 +44,7 @@ capture.start()
 # We really need to do this when notified of a new inforior.
 # This functionality doesn't yet exist in GDB.
 inferior = gdb.selected_inferior()
-cm3 = magictpa.armv7m.ARMv7M(inferior)
+cm3 = armv7m.ARMv7M(inferior)
 cm3.trace_init(capture)
 
 class CommandTpa(gdb.Command):
