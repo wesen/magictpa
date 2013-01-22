@@ -26,7 +26,7 @@ print "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.h
 
 # Some sanity checks
 if gdb.VERSION < '7.4':
-	raise gdb.GdbError("GDB verison < 7.4.  GDB 7.4 or greater is requred!");
+	raise gdb.GdbError("GDB version < 7.4.  GDB 7.4 or greater is required!")
 
 if gdb.parameter("mem inaccessible-by-default"):
 	raise gdb.GdbError("Please add 'set mem inaccessible-by-default off' to your .gdbinit")
@@ -35,10 +35,9 @@ if not gdb.parameter("target-async"):
 
 # Enable SWO capture and start capture/decoder thread
 #try:
-if True:
-	serial, ifno, epno = gdb.execute("monitor traceswo", False, True).split(':')
-	capture = magictpa.tpacapture.TPACapture(serial, int(ifno, 16), int(epno, 16))
-	capture.start()
+serial, ifno, epno = gdb.execute("monitor traceswo", False, True).split(':')
+capture = magictpa.tpacapture.TPACapture(serial, int(ifno, 16), int(epno, 16))
+capture.start()
 #except:
 #	raise gdb.GdbError("Failed to initialise SWO capture.  Is it supported by the target?")
 
@@ -63,6 +62,7 @@ class CommandSetTpa(gdb.Command):
 		gdb.Command.__init__(self, "set tpa", gdb.COMMAND_SUPPORT, 
 			prefix=True)
 CommandSetTpa()
+
 class CommandShowTpa(gdb.Command):
 	"""Show parameters for trace port analysis."""
 	def __init__(self):
@@ -103,7 +103,6 @@ class ParameterTpaRawFile(gdb.Parameter):
 		else:
 			return "Not logging trace stream."
 tpa_rawfile = ParameterTpaRawFile()
-
 
 class ParameterTpaTime(gdb.Parameter):
 	"""Valid options are 'off', 'host', or 'delta'.
